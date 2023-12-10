@@ -1,0 +1,18 @@
+Table name is: movie_score
+The table contains the following columns:
+Id with type NUMERIC and value example 7661
+name with type STRING and value example Love by Drowning
+rating with type STRING and value example R
+genre with type STRING and value example Drama
+year with type NUMERIC and value example 2020
+released with type STRING and value example 11/6/2020
+score with type STRING and value example 0
+director with type STRING and value example Justin Kreinbrink
+writer with type STRING and value example C.E. Poverman
+star with type STRING and value example Nicky Whelan
+country with type STRING and value example United States
+budget with type NUMERIC and value example 1000000
+company with type STRING and value example Dow Jazz Films
+runtime with type NUMERIC and value example 121
+data_cat with type STRING and value example TEST
+
