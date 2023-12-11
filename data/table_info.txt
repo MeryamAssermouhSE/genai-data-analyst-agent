@@ -1,3 +1,4 @@
+Database name is: movie_insights
 Table name is: movie_score
 The table contains the following columns:
 Id with type NUMERIC and value example 7661

@@ -9,7 +9,7 @@ def main():
     input_question = st.text_input("Type your question:")
 
     # Using a static file for db info for now
-    with open('data/database_info.txt') as file:
+    with open('data/table_info.txt') as file:
         database_info = file.read()
 
     # the prompt to generate the query

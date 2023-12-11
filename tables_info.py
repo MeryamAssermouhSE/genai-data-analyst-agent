@@ -13,6 +13,8 @@ def get_table_info_and_write_to_file(database_name, output_file_path):
 
     with open(output_file_path, 'w') as output_file:
         for table in tables:
+
+            output_file.write(f"Database name is: {database_name}\n")
             # Get the table object
             table_object = client.get_table(table)
 
@@ -36,4 +38,4 @@ def get_table_info_and_write_to_file(database_name, output_file_path):
             output_file.write("\n")
 
 # Example usage
-get_table_info_and_write_to_file('movie_insights', 'table_info.txt')
+get_table_info_and_write_to_file('movie_insights', 'data/table_info.txt')
