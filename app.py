@@ -6,15 +6,6 @@ from google.cloud import bigquery
 from google.auth import exceptions as auth_exceptions
 import json
 
-def authenticate(service_account_key):
-    try:
-        service_account_key_dict = json.loads(service_account_key)
-        client = bigquery.Client.from_service_account_info(service_account_key_dict)
-        return client
-    except auth_exceptions.GoogleAuthError:
-        st.error("Authentication failed. Please make sure your credentials are valid.")
-        return None
-
 def dry_run_query(client, sql_query):
     query_job_config = bigquery.QueryJobConfig(dry_run=True)
     query_job = client.query(sql_query, job_config=query_job_config)
@@ -24,21 +15,10 @@ def main():
 
     st.title("Data Analyst Agent")
 
-    #uploaded_file = st.file_uploader("Upload your Google Cloud service account key JSON file", type="json")
-
-
-    #if uploaded_file is not None:
-            #try:
-                # Read the content of the uploaded service account key file
-                #service_account_key_content = uploaded_file.read()
-
-                # Authenticate with Google Cloud
     client = bigquery.Client()
 
 
     if client:
-
-        #st.success("Authentication successful!")
 
     # Check if datasets are available
         datasets = list(client.list_datasets())
@@ -122,8 +102,6 @@ def main():
 
         else:
             st.warning("No datasets available. Make sure the authenticated user has the necessary permissions.")
-#except Exception as e:
-                #st.error(f"Error: {e}")
 
 
 if __name__ == "__main__":
