@@ -4,6 +4,7 @@ from src.bigquery import get_bq_result
 import json
 import ast
 from src.embedding import get_text_embeddings, find_most_similar_vector
+from thefuzz import fuzz
 
 
 def predict(
@@ -46,6 +47,11 @@ def replace_words_in_string(input_string, list1, list2):
 
     output_string = ''.join(result)
     return output_string
+
+def find_max_fuzz_ratio_index(main_string, string_list):
+    ratios = [fuzz.ratio(main_string, s) for s in string_list]
+    max_index = ratios.index(max(ratios))
+    return max_index
 
 def correct_query(query):
 
@@ -91,11 +97,12 @@ def correct_query(query):
             col_values = json.loads(col_values)
             col_values = [element[col] for element in col_values]
             #get list of embeddings
-            embeddings = get_text_embeddings(col_values)
-            value_embedding = get_text_embeddings([value])[0]
+            #embeddings = get_text_embeddings(col_values)
+            #value_embedding = get_text_embeddings([value])[0]
 
             #compute similarity and get index of closest actual value
-            i = find_most_similar_vector(embeddings,value_embedding)
+            #i = find_most_similar_vector(embeddings,value_embedding)
+            i = find_max_fuzz_ratio_index(value,col_values)
             corrected_values.append(col_values[i])
 
         print('corrected values : ',corrected_values)
@@ -110,6 +117,6 @@ def correct_query(query):
     return valid_query
 
 if __name__=="__main__":
-    valid_query = correct_query("select year from movie_insights.movie_score where name = 'the robinson'")
+    valid_query = correct_query("select year from movie_insights.movie_score where name = 'glitter'")
     print(valid_query)
     print(type(valid_query))
