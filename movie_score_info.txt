@@ -1,3 +1,0 @@
-Database name: sandbox-genai-meryam-9bfb:movie_insights.movie_score
-Table name: movie_score
-Table schema:

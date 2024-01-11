@@ -5,6 +5,7 @@ from tables_info import get_table_info_and_write_to_file
 from google.cloud import bigquery
 from google.auth import exceptions as auth_exceptions
 import json
+from src.correct_query import correct_query
 
 def dry_run_query(client, sql_query):
     query_job_config = bigquery.QueryJobConfig(dry_run=True)
@@ -12,17 +13,16 @@ def dry_run_query(client, sql_query):
     return query_job.total_bytes_processed
 
 def main():
-
     st.title("Data Analyst Agent")
-
     client = bigquery.Client()
-
-
     if client:
 
     # Check if datasets are available
+        
         datasets = list(client.list_datasets())
+
         if datasets:
+
             database_names = [dataset.dataset_id for dataset in datasets]
             database_name = st.selectbox("Select a database:", database_names)
 
@@ -41,7 +41,9 @@ def main():
             if st.button("Dry Run"):
                 query = question_to_query(input_question=input_question, database_info=database_info, prompt_format=engineered_prompt)
                 sql_query = query.candidates[0].text
-
+                
+                sql_query = correct_query(sql_query)
+                
                 # Perform a dry run to estimate bytes processed
                 bytes_processed = dry_run_query(client, sql_query)
 
@@ -50,7 +52,10 @@ def main():
 
                 query = question_to_query(input_question=input_question, database_info=database_info, prompt_format=engineered_prompt)
                 sql_query = query.candidates[0].text
-
+                
+                sql_query = correct_query(sql_query)
+                
+                #print('quey type: ',type(sql_query))
                 # Execute the query
                 query_result = get_bq_result(sql_query)
                 query_result = json.loads(query_result)
@@ -77,9 +82,10 @@ def main():
                         st.table(query_result)
                 
                 else : 
-
+                    
+                    #take only 10 first rows bc result is too long
                     query_result = query_result[:10]
-                                                    # the prompt to geenrate the answer
+                    # the prompt to geenrate the answer
                     engineered_prompt_1 = "I ran this sql query : {query_script}, and from the result I selected the first 10 rows : {query_result}. Use this information to formulate a clear and straightforward user friendly answer to this question : {question}. Keep in mind that the complete result contains "+str(n)+" rows, and this is just a sample for reference. Give me the answer in natural language ready to be read by the end user, without quotation marks or anything"
 
                     # Create an answer
